@@ -1,58 +1,23 @@
-import { createServerSupabase } from "@/lib/supabase/server";
 import type { AppRole } from "@/lib/types";
-import { redirect } from "next/navigation";
 
-const AUTH_BYPASS = process.env.AUTH_BYPASS !== "false";
+// Authentication disabled intentionally: allow direct dashboard access.
 const BYPASS_USER_ID =
   process.env.DEFAULT_BYPASS_USER_ID ?? "00000000-0000-0000-0000-000000000001";
 
 function bypassUser() {
-  return { id: BYPASS_USER_ID } as any;
+  return { id: BYPASS_USER_ID } as const;
 }
 
 export function isAuthBypassed() {
-  return AUTH_BYPASS;
+  return true;
 }
 
 export async function requireUser() {
-  if (AUTH_BYPASS) {
-    return bypassUser();
-  }
-
-  const supabase = await createServerSupabase();
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    throw new Error("Unauthorized");
-  }
-
-  return user;
+  return bypassUser();
 }
 
-export async function requireRole(required: AppRole) {
-  if (AUTH_BYPASS) {
-    return bypassUser();
-  }
-
-  const user = await requireUser();
-  const supabase = await createServerSupabase();
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (error || !data) {
-    throw new Error("Unauthorized");
-  }
-
-  if (required === "owner" && data.role !== "owner") {
-    throw new Error("Forbidden");
-  }
-
-  return user;
+export async function requireRole(_required: AppRole) {
+  return bypassUser();
 }
 
 export function isInternalRequest(request: Request) {
@@ -64,14 +29,6 @@ export function isInternalRequest(request: Request) {
   return token === expected;
 }
 
-export async function requireRoleOrRedirect(required: AppRole) {
-  if (AUTH_BYPASS) {
-    return;
-  }
-
-  try {
-    await requireRole(required);
-  } catch {
-    redirect("/login");
-  }
+export async function requireRoleOrRedirect(_required: AppRole) {
+  return;
 }
