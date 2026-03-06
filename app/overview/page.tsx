@@ -2,6 +2,7 @@ import { MetricCard } from "@/components/dashboard/MetricCard";
 import { getOverview } from "@/lib/dashboard";
 import { requireRoleOrRedirect } from "@/lib/auth";
 import { getCurrentSiteId } from "@/lib/request";
+import Link from "next/link";
 
 export default async function OverviewPage() {
   await requireRoleOrRedirect("editor");
@@ -50,6 +51,16 @@ export default async function OverviewPage() {
             ))}
           </tbody>
         </table>
+      </section>
+
+      <section className="card" style={{ marginTop: 16 }}>
+        <h3>Integrated Dashboards</h3>
+        <p className="muted">
+          Open your performance marketing layer integrated with SEO/GEO signals.
+        </p>
+        <Link href="/performance-pulse" className="pulse-link">
+          Go to Performance Pulse
+        </Link>
       </section>
 
       <section className="card" style={{ marginTop: 16 }}>
