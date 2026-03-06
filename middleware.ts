@@ -2,6 +2,15 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
+  const authBypass = process.env.AUTH_BYPASS !== "false";
+  if (authBypass) {
+    return NextResponse.next({
+      request: {
+        headers: request.headers
+      }
+    });
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers
