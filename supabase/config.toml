@@ -1,0 +1,5 @@
+[functions.run_daily_pipeline]
+verify_jwt = false
+
+[functions.flush_email_queue]
+verify_jwt = false
