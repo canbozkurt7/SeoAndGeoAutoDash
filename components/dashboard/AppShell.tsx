@@ -3,6 +3,15 @@
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { Sidebar } from "@/components/dashboard/Sidebar";
+import { TopBar } from "@/components/dashboard/TopBar";
+
+function titleForPath(pathname: string) {
+  if (pathname.startsWith("/performance-pulse")) return "Performance Pulse";
+  if (pathname.startsWith("/prompt-tracking")) return "Prompt Tracking";
+  if (pathname.startsWith("/alerts")) return "Alerts";
+  if (pathname.startsWith("/settings")) return "Settings";
+  return "Overview";
+}
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -15,7 +24,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="app-shell">
       <Sidebar />
-      <main className="content">{children}</main>
+      <div className="main-column">
+        <TopBar title={titleForPath(pathname)} />
+        <main className="content">{children}</main>
+      </div>
     </div>
   );
 }

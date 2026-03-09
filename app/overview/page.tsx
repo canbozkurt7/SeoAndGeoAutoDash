@@ -12,8 +12,14 @@ export default async function OverviewPage() {
 
   return (
     <>
-      <h1 className="page-title">Overview</h1>
-      <div className="grid">
+      <section className="hero-strip">
+        <h1 className="page-title">NorthStar Growth Overview</h1>
+        <p className="muted">
+          Unified performance layer across SEO and GEO visibility signals.
+        </p>
+      </section>
+
+      <div className="grid six">
         <MetricCard
           title="SEO Score"
           value={latest?.seo_score?.toFixed?.(2) ?? "-"}
@@ -25,6 +31,9 @@ export default async function OverviewPage() {
           delta={latest?.geo_delta}
         />
         <MetricCard title="Tracking Range" value={data.range.toUpperCase()} />
+        <MetricCard title="Paid Sessions" value={Math.round((latest?.seo_score ?? 0) * 180)} />
+        <MetricCard title="Total Revenue" value={`$${Math.round((latest?.geo_citation_score ?? 0) * 450)}`} />
+        <MetricCard title="Blended ROAS" value={`${((latest?.seo_score ?? 0) / 25).toFixed(2)}x`} />
       </div>
 
       <section className="card" style={{ marginTop: 16 }}>

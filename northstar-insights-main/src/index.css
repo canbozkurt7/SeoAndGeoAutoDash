@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 228 14% 4%;
+    --foreground: 220 20% 90%;
+
+    --card: 225 14% 7%;
+    --card-foreground: 220 20% 90%;
+
+    --popover: 225 14% 7%;
+    --popover-foreground: 220 20% 90%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 230 12% 12%;
+    --secondary-foreground: 220 20% 80%;
+
+    --muted: 230 12% 14%;
+    --muted-foreground: 220 10% 50%;
+
+    --accent: 38 91% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 230 12% 14%;
+    --input: 230 12% 16%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+
+    /* Channel Colors */
+    --google: 217 89% 61%;
+    --meta: 211 100% 49%;
+    --yandex: 11 97% 55%;
+    --organic: 142 53% 43%;
+
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.07);
+    --glass-blur: 12px;
+
+    /* Surface layers */
+    --surface-0: 228 14% 4%;
+    --surface-1: 225 14% 7%;
+    --surface-2: 230 12% 10%;
+    --surface-hover: 230 12% 12%;
+
+    --sidebar-background: 228 14% 5%;
+    --sidebar-foreground: 220 20% 70%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 230 12% 10%;
+    --sidebar-accent-foreground: 220 20% 90%;
+    --sidebar-border: 230 12% 12%;
+    --sidebar-ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+}
+
+@layer components {
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+  }
+
+  .font-mono-metric {
+    font-family: 'DM Mono', monospace;
+  }
+
+  .font-heading {
+    font-family: 'Syne', sans-serif;
+  }
+
+  .font-body {
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Stagger animation */
+  .stagger-enter {
+    animation: stagger-fade-in 0.4s ease-out forwards;
+    opacity: 0;
+  }
+
+  /* KPI counter */
+  .kpi-value {
+    @apply font-mono-metric text-3xl font-medium tracking-tight;
+  }
+
+  /* Change badges */
+  .change-positive {
+    @apply text-emerald-400 bg-emerald-400/10 border border-emerald-400/20;
+  }
+  .change-negative {
+    @apply text-red-400 bg-red-400/10 border border-red-400/20;
+  }
+  .change-neutral {
+    @apply text-muted-foreground bg-muted/50 border border-muted;
+  }
+
+  /* Nav active */
+  .nav-active {
+    border-left: 2px solid hsl(var(--primary));
+    background: hsl(var(--primary) / 0.08);
+    box-shadow: -2px 0 12px hsl(var(--primary) / 0.15);
+  }
+
+  /* Channel badges */
+  .channel-google { color: hsl(var(--google)); }
+  .channel-meta { color: hsl(var(--meta)); }
+  .channel-yandex { color: hsl(var(--yandex)); }
+  .channel-organic { color: hsl(var(--organic)); }
+}
+
+@layer utilities {
+  @keyframes stagger-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes counter-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--surface-2)) 50%, hsl(var(--muted)) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+}
