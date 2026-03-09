@@ -5,9 +5,11 @@ import { usePathname } from "next/navigation";
 
 const links = [
   { href: "/overview", label: "Overview" },
-  { href: "/performance-pulse", label: "Performance Pulse" },
+  { href: "/google-ads", label: "Google Ads" },
+  { href: "/meta-ads", label: "Meta Ads" },
+  { href: "/yandex-ads", label: "Yandex Ads" },
+  { href: "/organic-gsc", label: "Organic / GSC" },
   { href: "/prompt-tracking", label: "Prompt Tracking" },
-  { href: "/alerts", label: "Alerts" },
   { href: "/settings", label: "Settings" }
 ];
 
@@ -16,7 +18,7 @@ export function Sidebar() {
 
   return (
     <aside className="sidebar">
-      <div className="brand">NorthStar Insights</div>
+      <div className="brand">Kepler Club Performance Marketing</div>
       <nav className="nav">
         {links.map((item) => (
           <Link

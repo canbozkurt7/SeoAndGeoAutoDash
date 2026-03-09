@@ -6,9 +6,11 @@ import { Sidebar } from "@/components/dashboard/Sidebar";
 import { TopBar } from "@/components/dashboard/TopBar";
 
 function titleForPath(pathname: string) {
-  if (pathname.startsWith("/performance-pulse")) return "Performance Pulse";
+  if (pathname.startsWith("/google-ads")) return "Google Ads";
+  if (pathname.startsWith("/meta-ads")) return "Meta Ads";
+  if (pathname.startsWith("/yandex-ads")) return "Yandex Ads";
+  if (pathname.startsWith("/organic-gsc")) return "Organic / GSC";
   if (pathname.startsWith("/prompt-tracking")) return "Prompt Tracking";
-  if (pathname.startsWith("/alerts")) return "Alerts";
   if (pathname.startsWith("/settings")) return "Settings";
   return "Overview";
 }
