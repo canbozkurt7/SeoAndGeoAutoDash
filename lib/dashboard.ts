@@ -18,6 +18,23 @@ export async function getOverview(siteId: string, range: "7d" | "30d" = "7d") {
     .gte("date", fromDate)
     .order("date", { ascending: true });
 
+  let trend = scores ?? [];
+  if (!trend.length) {
+    const { data: snapshots } = await supabase
+      .from("seo_snapshot_daily")
+      .select("date,ctr,avg_position,conversions")
+      .eq("site_id", siteId)
+      .gte("date", fromDate)
+      .order("date", { ascending: true });
+    trend = (snapshots ?? []).map((s) => ({
+      date: s.date,
+      seo_score: Number((Math.min((s.ctr ?? 0) * 1200, 100) * 0.5 + Math.max(0, 100 - (s.avg_position ?? 50)) * 0.4 + Math.min((s.conversions ?? 0) * 1.5, 20)).toFixed(2)),
+      geo_citation_score: 0,
+      seo_delta: 0,
+      geo_delta: 0
+    }));
+  }
+
   const { data: promptTrends } = await supabase
     .from("prompt_change_view")
     .select("prompt_id,prompt_text,delta")
@@ -27,8 +44,8 @@ export async function getOverview(siteId: string, range: "7d" | "30d" = "7d") {
 
   return {
     range,
-    latest: scores?.at(-1) ?? null,
-    trend: scores ?? [],
+    latest: trend.at(-1) ?? null,
+    trend,
     topChangingPrompts: promptTrends ?? []
   };
 }

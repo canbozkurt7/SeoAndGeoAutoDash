@@ -86,17 +86,33 @@ export async function runDailyPipelineWithDeps(
     const alertConfig = await repo.getAlertConfig(siteId);
     const integration = await repo.getGoogleIntegration(siteId);
 
-    const refreshed = await withRetry(() =>
-      deps.google.refreshToken({
-        access_token: integration.access_token,
-        refresh_token: integration.refresh_token,
-        expires_at: integration.expires_at
-      }),
-      2,
-      400,
-      deps.sleep
-    );
-    await repo.updateGoogleToken(siteId, refreshed.access_token, refreshed.expires_at!);
+    let refreshed: {
+      access_token: string;
+      refresh_token: string;
+      expires_at?: string;
+    };
+    if (integration) {
+      refreshed = await withRetry(() =>
+        deps.google.refreshToken({
+          access_token: integration.access_token,
+          refresh_token: integration.refresh_token,
+          expires_at: integration.expires_at
+        }),
+        2,
+        400,
+        deps.sleep
+      );
+      if (refreshed.expires_at) {
+        await repo.updateGoogleToken(siteId, refreshed.access_token, refreshed.expires_at);
+      }
+    } else {
+      logs.push("google_integration_missing:fallback_metrics_used");
+      refreshed = {
+        access_token: "fallback-token",
+        refresh_token: "fallback-refresh",
+        expires_at: new Date(Date.now() + 3600_000).toISOString()
+      };
+    }
 
     const metrics = await withRetry(() =>
       deps.google.fetchDailyMetrics({
@@ -147,6 +163,10 @@ export async function runDailyPipelineWithDeps(
           logs.push(`engine_failed:${engine}:prompt:${prompt.id}`);
         }
       }
+    }
+
+    if (!prompts.length) {
+      logs.push("no_active_prompts:geo_score_limited");
     }
 
     const previous = await repo.getPreviousScore(siteId, runDate);

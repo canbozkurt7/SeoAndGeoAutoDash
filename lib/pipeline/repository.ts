@@ -53,15 +53,18 @@ export class PipelineRepository {
     };
   }
 
-  async getGoogleIntegration(siteId: string): Promise<IntegrationAccount> {
+  async getGoogleIntegration(siteId: string): Promise<IntegrationAccount | null> {
     const { data, error } = await this.supabase
       .from("integration_account")
       .select("provider,access_token,refresh_token,expires_at")
       .eq("site_id", siteId)
       .eq("provider", "google")
-      .single();
-    if (error || !data) {
-      throw new Error("Google integration missing");
+      .maybeSingle();
+    if (error) {
+      throw new Error(error.message);
+    }
+    if (!data) {
+      return null;
     }
     return data as IntegrationAccount;
   }

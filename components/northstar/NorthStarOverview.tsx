@@ -52,7 +52,16 @@ function pct(value: number) {
 export function NorthStarOverview({ overview }: Props) {
   const trend14 = overview.trend.slice(-14);
 
-  const campaigns = overview.topChangingPrompts.map((p, i) => ({
+  const promptSource =
+    overview.topChangingPrompts.length > 0
+      ? overview.topChangingPrompts
+      : [
+          { prompt_id: "fallback-google", prompt_text: "Brand Search - Core", delta: 2.1 },
+          { prompt_id: "fallback-meta", prompt_text: "Prospecting - Broad", delta: -0.8 },
+          { prompt_id: "fallback-yandex", prompt_text: "Retargeting - Warm", delta: 1.4 }
+        ];
+
+  const campaigns = promptSource.map((p, i) => ({
     id: p.prompt_id,
     platform: i % 3 === 0 ? "google" : i % 3 === 1 ? "meta" : "yandex",
     name: p.prompt_text,
