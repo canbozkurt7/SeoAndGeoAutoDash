@@ -10,8 +10,8 @@ function titleForPath(pathname: string) {
   if (pathname.startsWith("/meta-ads")) return "Meta Ads";
   if (pathname.startsWith("/yandex-ads")) return "Yandex Ads";
   if (pathname.startsWith("/organic-gsc")) return "Organic / GSC";
-  if (pathname.startsWith("/prompt-tracking")) return "Prompt Tracking";
-  if (pathname.startsWith("/settings")) return "Settings";
+  if (pathname.startsWith("/geo-intelligence")) return "Geo Intelligence";
+  if (pathname.startsWith("/reports")) return "Reports";
   return "Overview";
 }
 

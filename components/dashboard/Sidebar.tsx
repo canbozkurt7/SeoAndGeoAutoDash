@@ -9,8 +9,8 @@ const links = [
   { href: "/meta-ads", label: "Meta Ads" },
   { href: "/yandex-ads", label: "Yandex Ads" },
   { href: "/organic-gsc", label: "Organic / GSC" },
-  { href: "/prompt-tracking", label: "Prompt Tracking" },
-  { href: "/settings", label: "Settings" }
+  { href: "/geo-intelligence", label: "Geo Intelligence" },
+  { href: "/reports", label: "Reports" }
 ];
 
 export function Sidebar() {
